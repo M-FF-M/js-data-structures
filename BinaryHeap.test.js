@@ -23,7 +23,7 @@ function BinaryHeapTest() {
   assertArrayCmp(sample_sorted, sample_out, assertStrictEqual);
   assertStrictEqual(binHeap.isEmpty(), true);
 
-  const binHeap2 = new PriorityQueue(sample);
+  const binHeap2 = new PriorityQueue((a, b) => a - b, sample);
   assertStrictEqual(binHeap2.length, sample.length);
 
   const sample_out_2 = [];
@@ -53,7 +53,7 @@ function BinaryHeapTest() {
   assertArrayCmp(sample_sorted2, sample_out_3, assertStrictEqual);
   assertStrictEqual(binHeap3.isEmpty(), true);
 
-  const binHeap4 = new CustomPriorityQueue((a, b) => b - a, sample);
+  const binHeap4 = new PriorityQueue((a, b) => b - a, sample);
   assertStrictEqual(binHeap4.length, sample.length);
 
   const sample_out_4 = [];

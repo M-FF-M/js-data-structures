@@ -395,4 +395,15 @@ class AVLTree {
   }
 }
 
-const TreeSet = AVLTree;
+/**
+ * A tree set
+ */
+class TreeSet extends AVLTree {
+  /**
+   * Create a new tree set
+   * @param {Function} [cmpFct] the comparison function
+   */
+	constructor(cmpFct = (a, b) => a - b) {
+    super(cmpFct);
+	}
+}

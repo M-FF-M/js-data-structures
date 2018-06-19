@@ -96,10 +96,10 @@ class BinaryHeap {
 class CustomBinaryHeap {
   /**
    * Constructs a new custom binary heap
-   * @param {Function} cmpFct the comparison function
+   * @param {Function} [cmpFct] the comparison function
    * @param {any[]} [elems] the elements to insert into this heap
    */
-  constructor(cmpFct, ...elems) {
+  constructor(cmpFct = (a, b) => a - b, ...elems) {
     this.data = [];
     this.cmpFct = cmpFct;
     /**
@@ -181,5 +181,16 @@ class CustomBinaryHeap {
   }
 }
 
-const PriorityQueue = BinaryHeap;
-const CustomPriorityQueue = CustomBinaryHeap;
+/**
+ * A priority queue
+ */
+class PriorityQueue extends CustomBinaryHeap {
+  /**
+   * Constructs a new priority queue
+   * @param {Function} [cmpFct] the comparison function
+   * @param {any[]} [elems] the elements to insert into this priority queue
+   */
+  constructor(cmpFct = (a, b) => a - b, ...elems) {
+    super(cmpFct, ...elems);
+  }
+}

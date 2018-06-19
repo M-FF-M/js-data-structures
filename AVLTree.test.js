@@ -151,7 +151,7 @@ function AVLTreeTest() {
   }
   assertStrictEqual(avlT.isEmpty(), true);
 
-  const avlT2 = new AVLTree((a, b) => b - a);
+  const avlT2 = new TreeSet((a, b) => b - a);
   assertStrictEqual(avlT2.isEmpty(), true);
   for (let i=0; i<sample.length; i++) {
     avlT2.insert(sample[i]);
