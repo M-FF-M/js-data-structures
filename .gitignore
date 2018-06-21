@@ -1,2 +1,5 @@
 imports.js
 docs/js/*.js
+docs/node_modules
+docs/yarn.lock
+docs/docs

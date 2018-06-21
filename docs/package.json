@@ -1,0 +1,13 @@
+{
+  "name": "data-structure-docs",
+  "version": "1.0.0",
+  "description": "Documentation for basic data structures",
+  "main": "index.js",
+  "repository": "https://github.com/M-FF-M/js-data-structures",
+  "author": "Fabian Michel",
+  "license": "MIT",
+  "dependencies": {
+    "esdoc": "^1.1.0",
+    "esdoc-standard-plugin": "^1.0.0"
+  }
+}
