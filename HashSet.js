@@ -8,10 +8,11 @@ class HashSet {
    * @param {Function} toKeyFct how to map elements to hashes
    */
 	constructor(toKeyFct = a => a) {
-    this.toKeyFct = toKeyFct;
-    this.hashMap = {};
+    this._toKeyFct = toKeyFct;
+    this._hashMap = {};
     /**
-     * @type {number} the number of elements in this hash set
+     * the number of elements in this hash set
+     * @type {number}
      */
     this.length = 0;
 	}
@@ -21,8 +22,8 @@ class HashSet {
 	 * @param {any} key the key / element to be inserted
 	 */
 	insert(key) {
-    if (!this.hashMap.hasOwnProperty(this.toKeyFct(key))) {
-      this.hashMap[this.toKeyFct(key)] = key;
+    if (!this._hashMap.hasOwnProperty(this._toKeyFct(key))) {
+      this._hashMap[this._toKeyFct(key)] = key;
       this.length++;
     }
 	}
@@ -32,9 +33,9 @@ class HashSet {
 	 * @param {any} key the key / element to be removed
 	 */
   remove(key) {
-    if (this.hashMap.hasOwnProperty(this.toKeyFct(key))) {
-      this.hashMap[this.toKeyFct(key)] = undefined;
-      delete this.hashMap[this.toKeyFct(key)];
+    if (this._hashMap.hasOwnProperty(this._toKeyFct(key))) {
+      this._hashMap[this._toKeyFct(key)] = undefined;
+      delete this._hashMap[this._toKeyFct(key)];
       this.length--;
     }
   }
@@ -45,7 +46,7 @@ class HashSet {
 	 * @return {boolean} true if the key / element was found
 	 */
 	find(key) {
-		return this.hashMap.hasOwnProperty(this.toKeyFct(key));
+		return this._hashMap.hasOwnProperty(this._toKeyFct(key));
 	}
 
   /**
@@ -63,9 +64,9 @@ class HashSet {
    */
   toArray() {
     const ret = [];
-    for (const prop in this.hashMap) {
-      if (this.hashMap.hasOwnProperty(prop)) {
-        ret.push(this.hashMap[prop]);
+    for (const prop in this._hashMap) {
+      if (this._hashMap.hasOwnProperty(prop)) {
+        ret.push(this._hashMap[prop]);
       }
     }
     return ret;
@@ -89,13 +90,18 @@ class ListHashSet {
    * @param {Function} toKeyFct how to map elements to hashes
    */
 	constructor(toKeyFct = a => a) {
-    this.toKeyFct = toKeyFct;
-    this.hashMap = {};
+    this._toKeyFct = toKeyFct;
+    this._hashMap = {};
+    /**
+     * The list containing all the elements in this set
+     * @type {DoublyLinkedList}
+     */
     this.list = new DoublyLinkedList();
 	}
 
   /**
-   * @type {number} the number of elements in this hash set
+   * the number of elements in this hash set
+   * @type {number}
    */
   get length() {
     return this.list.length;
@@ -106,8 +112,8 @@ class ListHashSet {
 	 * @param {any} key the key / element to be inserted
 	 */
 	insert(key) {
-    if (typeof this.hashMap[this.toKeyFct(key)] === 'undefined') {
-      this.hashMap[this.toKeyFct(key)] = this.list.pushBack(key);
+    if (typeof this._hashMap[this._toKeyFct(key)] === 'undefined') {
+      this._hashMap[this._toKeyFct(key)] = this.list.pushBack(key);
     }
 	}
 
@@ -116,9 +122,9 @@ class ListHashSet {
 	 * @param {any} key the key / element to be removed
 	 */
   remove(key) {
-    if (typeof this.hashMap[this.toKeyFct(key)] !== 'undefined') {
-      this.list.removeLink(this.hashMap[this.toKeyFct(key)]);
-      this.hashMap[this.toKeyFct(key)] = undefined;
+    if (typeof this._hashMap[this._toKeyFct(key)] !== 'undefined') {
+      this.list.removeLink(this._hashMap[this._toKeyFct(key)]);
+      this._hashMap[this._toKeyFct(key)] = undefined;
     }
   }
 
@@ -128,7 +134,7 @@ class ListHashSet {
 	 * @return {boolean} true if the key / element was found
 	 */
 	find(key) {
-		return (typeof this.hashMap[this.toKeyFct(key)] !== 'undefined');
+		return (typeof this._hashMap[this._toKeyFct(key)] !== 'undefined');
 	}
 
   /**

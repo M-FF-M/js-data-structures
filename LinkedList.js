@@ -10,11 +10,13 @@ class SingleLink {
    */
   constructor(data, next) {
     /**
-     * @type {any} the wrapped object
+     * the wrapped object
+     * @type {any}
      */
     this.data = data;
     /**
-     * @type {SingleLink} the next object in the list
+     * the next object in the list
+     * @type {SingleLink}
      */
     this.next = next;
   }
@@ -32,15 +34,18 @@ class DoubleLink {
    */
   constructor(data, last, next) {
     /**
-     * @type {any} the wrapped object
+     * the wrapped object
+     * @type {any}
      */
     this.data = data;
     /**
-     * @type {DoubleLink} the previous object in the list
+     * the previous object in the list
+     * @type {DoubleLink}
      */
     this.last = last;
     /**
-     * @type {DoubleLink} the next object in the list
+     * the next object in the list
+     * @type {DoubleLink}
      */
     this.next = next;
   }
@@ -59,11 +64,13 @@ class LinkedList {
       elems = elems[0];
     }
     /**
-     * @type {number} the number of elements in this list
+     * the number of elements in this list
+     * @type {number}
      */
     this.length = 0;
     /**
-     * @type {SingleLink} the first element in the list (in this case, the back of the 'stack')
+     * the first element in the list (in this case, the back of the 'stack')
+     * @type {SingleLink}
      */
     this.first = null;
     if (elems.length > 0) {
@@ -238,15 +245,18 @@ class DoublyLinkedList {
       elems = elems[0];
     }
     /**
-     * @type {number} the number of elements in this list
+     * the number of elements in this list
+     * @type {number}
      */
     this.length = 0;
     /**
-     * @type {DoubleLink} the first element in the list
+     * the first element in the list
+     * @type {DoubleLink}
      */
     this.first = null;
     /**
-     * @type {DoubleLink} the last element in the list
+     * the last element in the list
+     * @type {DoubleLink}
      */
     this.last = null;
     if (elems.length > 0) {

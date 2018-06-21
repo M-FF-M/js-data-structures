@@ -9,7 +9,8 @@ class E {
    */
   constructor(v) {
     /**
-     * @type {number} the destination node of this edge
+     * the destination node of this edge
+     * @type {number}
      */
     this.v = v;
   }
@@ -26,11 +27,13 @@ class WE {
    */
   constructor(v, w) {
     /**
-     * @type {number} the destination node of this edge
+     * the destination node of this edge
+     * @type {number}
      */
     this.v = v;
     /**
-     * @type {number} the weight of this edge
+     * the weight of this edge
+     * @type {number}
      */
     this.w = w;
   }
@@ -47,13 +50,22 @@ class Graph {
    */
   constructor(n) {
     /**
-     * @type {number} the number of nodes in this graph
+     * the number of nodes in this graph
+     * @type {number}
      */
     this.n = n;
-    this.weighted = false;
+    this._weighted = false;
+    /**
+     * the adjacency list of this graph
+     * @type {E[][]|WE[][]}
+     */
     this.adjList = [];
+    /**
+     * the reverse adjacency list of this graph
+     * @type {E[][]|WE[][]}
+     */
     this.adjListRev = [];
-    this.nodeMap = new Map();
+    this._nodeMap = new Map();
     for (let i=0; i<this.n; i++) {
       this.adjList[i] = [];
       this.adjListRev[i] = [];
@@ -178,7 +190,7 @@ class Graph {
     if (typeof w === 'number') {
       this.adjList[u].push(new WE(v, w));
       this.adjListRev[v].push(new WE(u, w));
-      this.weighted = true;
+      this._weighted = true;
     } else {
       this.adjList[u].push(new E(v));
       this.adjListRev[v].push(new E(u));
@@ -204,7 +216,7 @@ class Graph {
    * @return {any} the node's value or i (see description above)
    */
   getNode(i) {
-    if (this.nodeMap.has(i)) return this.nodeMap.get(i);
+    if (this._nodeMap.has(i)) return this._nodeMap.get(i);
     return i;
   }
 
@@ -215,7 +227,7 @@ class Graph {
    * @param {any} obj the object the node should be associated with
    */
   setNode(i, obj) {
-    this.nodeMap.set(i, obj);
+    this._nodeMap.set(i, obj);
   }
 
   /**

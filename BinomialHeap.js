@@ -10,7 +10,15 @@ class BinomialTreeNode {
    * @param {any} key the key / element to insert into this tree
    */
 	constructor(key) {
+    /**
+     * the key of this node
+     * @type {any}
+     */
 		this.key = key;
+    /**
+     * the children of this node
+     * @type {BinomialTreeNode[]}
+     */
 		this.children = [];
 	}
 
@@ -77,19 +85,20 @@ class BinomialHeap {
    * @param {BinomialTreeNode[]|any} [elems] the element or BinomialTreeNodes to insert into this heap
    */
 	constructor(...elems) {
-    this.trees = [];
+    this._trees = [];
     /**
-     * @type {number} the number of elements in this heap
+     * the number of elements in this heap
+     * @type {number}
      */
     this.length = 0;
     if (elems.length > 0) {
       if (elems[0] instanceof Array) elems = elems[0];
       if (elems.length == 1 && !(elems[0] instanceof BinomialTreeNode)) {
-        this.trees.push(new BinomialTreeNode(elems[0]));
+        this._trees.push(new BinomialTreeNode(elems[0]));
         this.length = 1;
       } else {
         for (let i=0; i<elems.length; i++) {
-          this.trees.push(elems[i]);
+          this._trees.push(elems[i]);
           this.length += (1 << elems[i].rank());
         }
       }
@@ -101,10 +110,10 @@ class BinomialHeap {
    * @return {any} the minimum element
    */
 	min() {
-		if (this.trees.length == 0) throw new RangeError('BinomialHeap: can\'t call min() on an empty heap.');
+		if (this._trees.length == 0) throw new RangeError('BinomialHeap: can\'t call min() on an empty heap.');
 		let min = Infinity;
-		for (let i=0; i<this.trees.length; i++) {
-			if (this.trees[i].min() < min) min = this.trees[i].min();
+		for (let i=0; i<this._trees.length; i++) {
+			if (this._trees[i].min() < min) min = this._trees[i].min();
 		}
 		return min;
 	}
@@ -123,18 +132,18 @@ class BinomialHeap {
    * @return {any} the minimum element
    */
 	deleteMin() {
-		if (this.trees.length == 0) throw new RangeError("Can't call deleteMin() on an empty heap.");
+		if (this._trees.length == 0) throw new RangeError("Can't call deleteMin() on an empty heap.");
 		let min = Infinity; let minTree = null; let minIdx = 0;
-		for (let i=0; i<this.trees.length; i++) {
-			if (this.trees[i].min() < min) {
-				min = this.trees[i].min();
-        minTree = this.trees[i];
+		for (let i=0; i<this._trees.length; i++) {
+			if (this._trees[i].min() < min) {
+				min = this._trees[i].min();
+        minTree = this._trees[i];
         minIdx = i;
 			}
 		}
     const secondHeap = new BinomialHeap(minTree.deleteMin());
     this.length -= secondHeap.length + 1;
-    this.trees.splice(minIdx, 1);
+    this._trees.splice(minIdx, 1);
 		this.mergeWith(secondHeap);
 		return min;
 	}
@@ -148,15 +157,15 @@ class BinomialHeap {
     const newTrees = [];
 		let lastRank = -1;
     this.length += heapB.length;
-		while (idx_a < this.trees.length || idx_b < heapB.trees.length) {
+		while (idx_a < this._trees.length || idx_b < heapB._trees.length) {
 			let a = null, b = null;
 			let rank_a = Infinity, rank_b = Infinity;
-			if (idx_a < this.trees.length) {
-				a = this.trees[idx_a];
+			if (idx_a < this._trees.length) {
+				a = this._trees[idx_a];
 				rank_a = a.rank();
 			}
-			if (idx_b < heapB.trees.length) {
-				b = heapB.trees[idx_b];
+			if (idx_b < heapB._trees.length) {
+				b = heapB._trees[idx_b];
 				rank_b = b.rank();
 			}
 			if (rank_a < rank_b) {
@@ -186,7 +195,7 @@ class BinomialHeap {
 				lastRank = merged.rank();
 			}
 		}
-		this.trees = newTrees;
+		this._trees = newTrees;
   }
   
   /**
@@ -194,6 +203,6 @@ class BinomialHeap {
    * @return {boolean} true if the heap is empty
    */
   isEmpty() {
-    return this.trees.length == 0;
+    return this._trees.length == 0;
   }
 }

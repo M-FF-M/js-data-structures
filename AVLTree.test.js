@@ -21,9 +21,9 @@ function printErr(avlTree, err) {
 
 function validAVL(avlTree) {
   const h1 = getLeftHeight(avlTree), h2 = getRightHeight(avlTree);
-  if (h1 != avlTree.leftHeight() || h2 != avlTree.rightHeight()) {
-    printErr(avlTree, "Unexpected height difference: getLeftHeight(): " + h1 + ", leftHeight(): " + avlTree.leftHeight()
-      + ", getRightHeight(): " + h2 + ", rightHeight(): " + avlTree.rightHeight());
+  if (h1 != avlTree._leftHeight() || h2 != avlTree._rightHeight()) {
+    printErr(avlTree, "Unexpected height difference: getLeftHeight(): " + h1 + ", leftHeight(): " + avlTree._leftHeight()
+      + ", getRightHeight(): " + h2 + ", rightHeight(): " + avlTree._rightHeight());
     return false;
   }
   if (getHeightDiff(avlTree) != avlTree.balance) {
@@ -40,12 +40,12 @@ function validAVL(avlTree) {
   }
   if (avlTree.right != null) {
     b = avlTree.right.findLeftChild();
-    if (avlTree.cmpFct(b, avlTree.key.data) == 0) {
+    if (avlTree._cmpFct(b, avlTree.key.data) == 0) {
       printErr(avlTree, "Keys not sorted: key: " + avlTree.key.data + ", b: " + b);
       return false;
     }
   }
-  if (avlTree.cmpFct(a, avlTree.key.data) > 0 || avlTree.cmpFct(b, avlTree.key.data) < 0) {
+  if (avlTree._cmpFct(a, avlTree.key.data) > 0 || avlTree._cmpFct(b, avlTree.key.data) < 0) {
     printErr(avlTree, "Keys not sorted: a: " + a + ", key: " + avlTree.key.data + ", b: " + b);
     return false;
   }
@@ -56,8 +56,8 @@ function validAVL(avlTree) {
 }
 
 function validAVLTree(avlTree) {
-  if (avlTree.root == null) return true;
-  else return validAVL(avlTree.root);
+  if (avlTree._root === null) return true;
+  else return validAVL(avlTree._root);
 }
 
 function AVLTreeTest() {

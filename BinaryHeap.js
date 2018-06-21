@@ -10,43 +10,44 @@ class BinaryHeap {
    * @param {any[]} [elems] the elements to insert into this heap
    */
   constructor(...elems) {
-    this.data = [];
+    this._data = [];
     /**
-     * @type {number} the number of elements in this heap
+     * the number of elements in this heap
+     * @type {number}
      */
     this.length = 0;
     if (elems.length > 0) {
       if (elems[0] instanceof Array) elems = elems[0];
-      this.data = elems.slice();
-      this.length = this.data.length;
-      for (let i=Math.floor(this.length / 2) - 1; i>=0; i--) this.siftDown(i);
+      this._data = elems.slice();
+      this.length = this._data.length;
+      for (let i=Math.floor(this.length / 2) - 1; i>=0; i--) this._siftDown(i);
     }
   }
 
-  swap(i, j) {
-    let tmp = this.data[i];
-    this.data[i] = this.data[j];
-    this.data[j] = tmp;
+  _swap(i, j) {
+    let tmp = this._data[i];
+    this._data[i] = this._data[j];
+    this._data[j] = tmp;
   }
 
-  siftUp(i) {
-    while (i > 0 && this.data[Math.floor((i - 1) / 2)] > this.data[i]) {
-      this.swap(i, Math.floor((i - 1) / 2));
+  _siftUp(i) {
+    while (i > 0 && this._data[Math.floor((i - 1) / 2)] > this._data[i]) {
+      this._swap(i, Math.floor((i - 1) / 2));
       i = Math.floor((i - 1) / 2);
     }
   }
 
-  siftDown(i) {
+  _siftDown(i) {
     let m;
     while (2*i + 1 < this.length) {
       if (2*i + 2 >= this.length)
         m = 2*i + 1;
       else {
-        if (this.data[2*i + 1] < this.data[2*i + 2]) m = 2*i + 1;
+        if (this._data[2*i + 1] < this._data[2*i + 2]) m = 2*i + 1;
         else m = 2*i + 2;
       }
-      if (this.data[i] <= this.data[m]) return;
-      this.swap(i, m); i = m;
+      if (this._data[i] <= this._data[m]) return;
+      this._swap(i, m); i = m;
     }
   }
 
@@ -56,7 +57,7 @@ class BinaryHeap {
    */
   min() {
 		if (this.length == 0) throw new RangeError('BinaryHeap: can\'t call min() on an empty heap.');
-    return this.data[0];
+    return this._data[0];
   }
 
   /**
@@ -64,10 +65,10 @@ class BinaryHeap {
    * @return {any} the minimum element
    */
   deleteMin() {
-    let ret = this.data[0];
+    let ret = this._data[0];
     this.length--;
-    this.data[0] = this.data[this.length]; this.data.pop();
-    this.siftDown(0);
+    this._data[0] = this._data[this.length]; this._data.pop();
+    this._siftDown(0);
     return ret;
   }
 
@@ -76,8 +77,8 @@ class BinaryHeap {
    * @param {any} key the new element / key
    */
   insert(key) {
-    this.data[this.length] = key;
-    this.siftUp(this.length);
+    this._data[this.length] = key;
+    this._siftUp(this.length);
     this.length++;
   }
 
@@ -100,44 +101,45 @@ class CustomBinaryHeap {
    * @param {any[]} [elems] the elements to insert into this heap
    */
   constructor(cmpFct = (a, b) => a - b, ...elems) {
-    this.data = [];
+    this._data = [];
     this.cmpFct = cmpFct;
     /**
-     * @type {number} the number of elements in this heap
+     * the number of elements in this heap
+     * @type {number}
      */
     this.length = 0;
     if (elems.length > 0) {
       if (elems[0] instanceof Array) elems = elems[0];
-      this.data = elems.slice();
-      this.length = this.data.length;
-      for (let i=Math.floor(this.length / 2) - 1; i>=0; i--) this.siftDown(i);
+      this._data = elems.slice();
+      this.length = this._data.length;
+      for (let i=Math.floor(this.length / 2) - 1; i>=0; i--) this._siftDown(i);
     }
   }
 
-  swap(i, j) {
-    let tmp = this.data[i];
-    this.data[i] = this.data[j];
-    this.data[j] = tmp;
+  _swap(i, j) {
+    let tmp = this._data[i];
+    this._data[i] = this._data[j];
+    this._data[j] = tmp;
   }
 
-  siftUp(i) {
-    while (i > 0 && this.cmpFct(this.data[Math.floor((i - 1) / 2)], this.data[i]) > 0) {
-      this.swap(i, Math.floor((i - 1) / 2));
+  _siftUp(i) {
+    while (i > 0 && this.cmpFct(this._data[Math.floor((i - 1) / 2)], this._data[i]) > 0) {
+      this._swap(i, Math.floor((i - 1) / 2));
       i = Math.floor((i - 1) / 2);
     }
   }
 
-  siftDown(i) {
+  _siftDown(i) {
     let m;
     while (2*i + 1 < this.length) {
       if (2*i + 2 >= this.length)
         m = 2*i + 1;
       else {
-        if (this.cmpFct(this.data[2*i + 1], this.data[2*i + 2]) < 0) m = 2*i + 1;
+        if (this.cmpFct(this._data[2*i + 1], this._data[2*i + 2]) < 0) m = 2*i + 1;
         else m = 2*i + 2;
       }
-      if (this.cmpFct(this.data[i], this.data[m]) <= 0) return;
-      this.swap(i, m); i = m;
+      if (this.cmpFct(this._data[i], this._data[m]) <= 0) return;
+      this._swap(i, m); i = m;
     }
   }
 
@@ -147,7 +149,7 @@ class CustomBinaryHeap {
    */
   min() {
 		if (this.length == 0) throw new RangeError('BinaryHeap: can\'t call min() on an empty heap.');
-    return this.data[0];
+    return this._data[0];
   }
 
   /**
@@ -155,10 +157,10 @@ class CustomBinaryHeap {
    * @return {any} the minimum element
    */
   deleteMin() {
-    let ret = this.data[0];
+    let ret = this._data[0];
     this.length--;
-    this.data[0] = this.data[this.length]; this.data.pop();
-    this.siftDown(0);
+    this._data[0] = this._data[this.length]; this._data.pop();
+    this._siftDown(0);
     return ret;
   }
 
@@ -167,8 +169,8 @@ class CustomBinaryHeap {
    * @param {any} key the new element / key
    */
   insert(key) {
-    this.data[this.length] = key;
-    this.siftUp(this.length);
+    this._data[this.length] = key;
+    this._siftUp(this.length);
     this.length++;
   }
 

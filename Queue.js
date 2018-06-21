@@ -11,14 +11,14 @@ class Queue {
     if (elems.length == 1 && (elems[0] instanceof Array)) {
       elems = elems[0];
     }
-    this.data = elems.slice();
-    this.front = 0;
-    this.last = elems.length - 1;
-    this.size = 16;
+    this._data = elems.slice();
+    this._front = 0;
+    this._last = elems.length - 1;
+    this._size = 16;
     if (elems.length > 0) {
-      this.size = Math.max(16, 1 << Math.ceil( Math.log2(elems.length) ));
+      this._size = Math.max(16, 1 << Math.ceil( Math.log2(elems.length) ));
     } else {
-      this.front = 1;
+      this._front = 1;
     }
   }
 
@@ -32,7 +32,7 @@ class Queue {
       + 'length is ' + this.length + '.');
     if (idx >= this.length) throw new RangeError('Queue: index ' + idx + ' is out of bounds '
       + 'length is ' + this.length + '.');
-    return this.data[(this.front + idx) % this.size];
+    return this._data[(this._front + idx) % this._size];
   }
 
   /**
@@ -42,7 +42,7 @@ class Queue {
    */
   contains(obj) {
     for (let i=0; i<this.length; i++) {
-      if (this.data[(this.front + i) % this.size] === obj)
+      if (this._data[(this._front + i) % this._size] === obj)
         return true;
     }
     return false;
@@ -56,7 +56,7 @@ class Queue {
   removeObj(obj) {
     let idx = -1;
     for (let i=0; i<this.length; i++) {
-      if (this.data[(this.front + i) % this.size] === obj) {
+      if (this._data[(this._front + i) % this._size] === obj) {
         idx = i;
         break;
       }
@@ -76,32 +76,33 @@ class Queue {
     if (idx >= this.length) throw new RangeError('Queue: index ' + idx + ' is out of bounds '
       + 'length is ' + this.length + '.');
     for (let i=idx; i<this.length; i++) {
-      this.data[i % this.size] = this.data[(i + 1) % this.size];
+      this._data[i % this._size] = this._data[(i + 1) % this._size];
     }
-    --this.last;
-    if (this.last < 0) this.last = this.size - 1;
-    this.checkFrontShift();
+    --this._last;
+    if (this._last < 0) this._last = this._size - 1;
+    this._checkFrontShift();
   }
 
   /**
-   * @type {number} the number of elements in this heap
+   * the number of elements in this queue
+   * @type {number}
    */
   get length() {
-    if (this.last < 0) return 0;
-    if (this.last >= this.front) return this.last - this.front + 1;
-    return this.size - this.front + this.last + 1;
+    if (this._last < 0) return 0;
+    if (this._last >= this._front) return this._last - this._front + 1;
+    return this._size - this._front + this._last + 1;
   }
 
-  checkFrontShift() {
-    if (this.length < this.size / 4) {
+  _checkFrontShift() {
+    if (this.length < this._size / 4) {
       let tmpData = [];
       for (let i=0; i<this.length; i++) {
-        tmpData[i] = this.data[(this.front + i) % this.size];
+        tmpData[i] = this._data[(this._front + i) % this._size];
       }
-      this.data = tmpData;
-      this.front = 0;
-      this.last = this.data.length - 1;
-      this.size = Math.max(16, 1 << Math.ceil( Math.log2(this.data.length) ), this.size / 2);
+      this._data = tmpData;
+      this._front = 0;
+      this._last = this._data.length - 1;
+      this._size = Math.max(16, 1 << Math.ceil( Math.log2(this._data.length) ), this._size / 2);
     }
   }
 
@@ -111,22 +112,22 @@ class Queue {
    */
   pushBack(obj) {
     if (this.length == 0) {
-      this.data.push(obj);
-      this.front = this.last = 0;
+      this._data.push(obj);
+      this._front = this._last = 0;
     } else {
-      if (this.last >= this.front) {
-        this.data[++this.last] = obj;
-        if (this.last >= this.size) this.size *= 2;
+      if (this._last >= this._front) {
+        this._data[++this._last] = obj;
+        if (this._last >= this._size) this._size *= 2;
       } else {
-        if (this.last < this.front - 1) {
-          this.data[++this.last] = obj;
+        if (this._last < this._front - 1) {
+          this._data[++this._last] = obj;
         } else {
-          for (let i=0; i<this.size-this.front; i++) {
-            this.data[this.front + this.size + i] = this.data[this.front + i];
+          for (let i=0; i<this._size-this._front; i++) {
+            this._data[this._front + this._size + i] = this._data[this._front + i];
           }
-          this.front += this.size;
-          this.size *= 2;
-          this.data[++this.last] = obj;
+          this._front += this._size;
+          this._size *= 2;
+          this._data[++this._last] = obj;
         }
       }
     }
@@ -138,7 +139,7 @@ class Queue {
    */
   getBack() {
     if (this.length == 0) throw new RangeError('Queue: cannot get last element from empty queue.');
-    return this.data[this.last];
+    return this._data[this._last];
   }
 
   /**
@@ -147,17 +148,17 @@ class Queue {
    */
   popBack() {
     if (this.length == 0) throw new RangeError('Queue: cannot pop last element from empty queue.');
-    const ret = this.data[this.last];
+    const ret = this._data[this._last];
     if (this.length == 1) {
-      this.data = [];
-      this.front = 1;
-      this.last = -1;
-      this.size = 16;
+      this._data = [];
+      this._front = 1;
+      this._last = -1;
+      this._size = 16;
       return ret;
     }
-    --this.last;
-    if (this.last < 0) this.last = this.size - 1;
-    this.checkFrontShift();
+    --this._last;
+    if (this._last < 0) this._last = this._size - 1;
+    this._checkFrontShift();
     return ret;
   }
 
@@ -167,27 +168,27 @@ class Queue {
    */
   pushFront(obj) {
     if (this.length == 0) {
-      this.data.push(obj);
-      this.front = this.last = 0;
+      this._data.push(obj);
+      this._front = this._last = 0;
     } else {
-      if (this.last >= this.front) {
-        if (this.front > 0) {
-          this.data[--this.front] = obj;
+      if (this._last >= this._front) {
+        if (this._front > 0) {
+          this._data[--this._front] = obj;
         } else {
-          if (this.last == this.size - 1) this.size *= 2;
-          this.front = this.size - 1;
-          this.data[this.front] = obj;
+          if (this._last == this._size - 1) this._size *= 2;
+          this._front = this._size - 1;
+          this._data[this._front] = obj;
         }
       } else {
-        if (this.last < this.front - 1) {
-          this.data[--this.front] = obj;
+        if (this._last < this._front - 1) {
+          this._data[--this._front] = obj;
         } else {
-          for (let i=0; i<this.size-this.front; i++) {
-            this.data[this.front + this.size + i] = this.data[this.front + i];
+          for (let i=0; i<this._size-this._front; i++) {
+            this._data[this._front + this._size + i] = this._data[this._front + i];
           }
-          this.front += this.size;
-          this.size *= 2;
-          this.data[--this.front] = obj;
+          this._front += this._size;
+          this._size *= 2;
+          this._data[--this._front] = obj;
         }
       }
     }
@@ -199,7 +200,7 @@ class Queue {
    */
   getFront() {
     if (this.length == 0) throw new RangeError('Queue: cannot get last element from empty queue.');
-    return this.data[this.front];
+    return this._data[this._front];
   }
 
   /**
@@ -208,17 +209,17 @@ class Queue {
    */
   popFront() {
     if (this.length == 0) throw new RangeError('Queue: cannot pop first element from empty queue.');
-    const ret = this.data[this.front];
+    const ret = this._data[this._front];
     if (this.length == 1) {
-      this.data = [];
-      this.front = 1;
-      this.last = -1;
-      this.size = 16;
+      this._data = [];
+      this._front = 1;
+      this._last = -1;
+      this._size = 16;
       return ret;
     }
-    ++this.front;
-    if (this.front >= this.size) this.front = 0;
-    this.checkFrontShift();
+    ++this._front;
+    if (this._front >= this._size) this._front = 0;
+    this._checkFrontShift();
     return ret;
   }
 
@@ -238,7 +239,7 @@ class Queue {
     let ret = "Queue: [";
     for (let i=0; i<this.length; i++) {
       if (i > 0) ret += ", ";
-      ret += this.data[(this.front + i) % this.size];
+      ret += this._data[(this._front + i) % this._size];
     }
     ret += "]";
     return ret;
