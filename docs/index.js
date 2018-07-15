@@ -16,6 +16,7 @@ for (let i=0; i<files.length; i++) {
   while ((result = regex.exec(file_contents[i])) !== null) {
     classes.push(result[1]);
   }
+  if (!fs.existsSync('js')) fs.mkdirSync('js');
   fs.writeFileSync('js/' + files[i], file_contents[i], 'utf8');
 }
 
@@ -23,4 +24,6 @@ console.log('found ' + files.length + ' files: ' + files.join(', '));
 console.log('found ' + classes.length + ' classes: ' + classes.join(', '));
 console.log('running esdoc...');
 
-pr.execSync('./node_modules/.bin/esdoc', {stdio:[0,1,2]});
+const sep = process.platform === "win32" ? '\\' : '/';
+
+pr.execSync(`.${sep}node_modules${sep}.bin${sep}esdoc`, {stdio:[0,1,2]});
