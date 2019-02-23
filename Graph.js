@@ -73,6 +73,32 @@ class Graph {
   }
 
   /**
+   * Executes Dijkstra on the graph
+   * @param {number} start the number of the starting node
+   * @return {number[]} an array with the distances for each node (Infinity for unreachable nodes)
+   */
+  dijkstra(start) {
+    const dist = [];
+    for (let i=0; i<this.n; i++) dist[i] = Infinity;
+    dist[start] = 0;
+    const pq = new PriorityQueue((a, b) => a[0] - b[0]);
+    pq.insert([0, start]);
+    while (!pq.isEmpty()) {
+      const [cdist, cnode] = pq.deleteMin();
+      if (cdist != dist[cnode]) continue;
+      for (let j=0; j<this.adjList[cnode].length; j++) {
+        const nnode = this.adjList[cnode][j].v;
+        const ndist = cdist + this.adjList[cnode][j].w;
+        if (ndist < dist[nnode]) {
+          dist[nnode] = ndist;
+          pq.insert([ndist, nnode]);
+        }
+      }
+    }
+    return dist;
+  }
+
+  /**
    * Converts this graph into a graph with the strongly connected components of this graph as nodes.
    * The nodes of the new graph will be associated with an array containing the nodes that were part
    * of the strongly connected component in the original graph.

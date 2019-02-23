@@ -13,6 +13,12 @@ function GraphTest() {
     [7, 0], [7, 1], [8, 13], [9, 4], [10, 14], [11, 7], [11, 8], [12, 3], [13, 5], [13, 11],
     [14, 6]
   ];
+  const nodes3_num = 9;
+  const edges3 = [
+    [0, 2, 1], [0, 3, 5], [2, 1, 3], [2, 4, 1], [2, 5, 1], [3, 0, 2], [3, 2, 4], [4, 6, 1],
+    [5, 7, 6], [6, 3, 1], [6, 7, 3], [7, 4, 2], [8, 7, 5]
+  ];
+  const g3dijkstra = [0, 4, 1, 4, 2, 2, 3, 6, Infinity];
 
   // --> Graph
   const g = new Graph(nodes.length);
@@ -68,4 +74,10 @@ function GraphTest() {
       assertNotStrictEqual(idx, -1); adjListEntries2[i][idx] = -1;
     }
   }
+
+  const g5 = new Graph(nodes3_num);
+  for (let i=0; i<edges3.length; i++)
+    g5.insertEdge(edges3[i][0], edges3[i][1], edges3[i][2]);
+  const dijk = g5.dijkstra(0);
+  assertArrayCmp(dijk, g3dijkstra, assertStrictEqual);
 }
