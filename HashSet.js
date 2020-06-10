@@ -7,7 +7,7 @@ class HashSet {
    * Create a new hash set
    * @param {Function} toKeyFct how to map elements to hashes
    */
-	constructor(toKeyFct = a => a) {
+  constructor(toKeyFct = a => a) {
     this._toKeyFct = toKeyFct;
     this._hashMap = {};
     /**
@@ -15,23 +15,23 @@ class HashSet {
      * @type {number}
      */
     this.length = 0;
-	}
+  }
 
-	/**
-	 * Insert a new key / element into this hash set
-	 * @param {any} key the key / element to be inserted
-	 */
-	insert(key) {
+  /**
+   * Insert a new key / element into this hash set
+   * @param {any} key the key / element to be inserted
+   */
+  insert(key) {
     if (!this._hashMap.hasOwnProperty(this._toKeyFct(key))) {
       this._hashMap[this._toKeyFct(key)] = key;
       this.length++;
     }
-	}
+  }
 
-	/**
-	 * Remove a key / element from this hash set
-	 * @param {any} key the key / element to be removed
-	 */
+  /**
+   * Remove a key / element from this hash set
+   * @param {any} key the key / element to be removed
+   */
   remove(key) {
     if (this._hashMap.hasOwnProperty(this._toKeyFct(key))) {
       this._hashMap[this._toKeyFct(key)] = undefined;
@@ -40,20 +40,20 @@ class HashSet {
     }
   }
 
-	/**
-	 * Search for a key / element in this hash set
-	 * @param {any} key the key / element to search for
-	 * @return {boolean} true if the key / element was found
-	 */
-	find(key) {
-		return this._hashMap.hasOwnProperty(this._toKeyFct(key));
-	}
+  /**
+   * Search for a key / element in this hash set
+   * @param {any} key the key / element to search for
+   * @return {boolean} true if the key / element was found
+   */
+  find(key) {
+    return this._hashMap.hasOwnProperty(this._toKeyFct(key));
+  }
 
   /**
-	 * Check whether a key / element is contained in this hash set
-	 * @param {any} key the key / element to search for
-	 * @return {boolean} true if the key / element was found
-	 */
+   * Check whether a key / element is contained in this hash set
+   * @param {any} key the key / element to search for
+   * @return {boolean} true if the key / element was found
+   */
   contains(key) {
     return this.find(key);
   }
@@ -89,7 +89,7 @@ class ListHashSet {
    * Create a new hash set
    * @param {Function} toKeyFct how to map elements to hashes
    */
-	constructor(toKeyFct = a => a) {
+  constructor(toKeyFct = a => a) {
     this._toKeyFct = toKeyFct;
     this._hashMap = {};
     /**
@@ -97,7 +97,7 @@ class ListHashSet {
      * @type {DoublyLinkedList}
      */
     this.list = new DoublyLinkedList();
-	}
+  }
 
   /**
    * the number of elements in this hash set
@@ -107,20 +107,20 @@ class ListHashSet {
     return this.list.length;
   }
 
-	/**
-	 * Insert a new key / element into this hash set
-	 * @param {any} key the key / element to be inserted
-	 */
-	insert(key) {
+  /**
+   * Insert a new key / element into this hash set
+   * @param {any} key the key / element to be inserted
+   */
+  insert(key) {
     if (typeof this._hashMap[this._toKeyFct(key)] === 'undefined') {
       this._hashMap[this._toKeyFct(key)] = this.list.pushBack(key);
     }
-	}
+  }
 
-	/**
-	 * Remove a key / element from this hash set
-	 * @param {any} key the key / element to be removed
-	 */
+  /**
+   * Remove a key / element from this hash set
+   * @param {any} key the key / element to be removed
+   */
   remove(key) {
     if (typeof this._hashMap[this._toKeyFct(key)] !== 'undefined') {
       this.list.removeLink(this._hashMap[this._toKeyFct(key)]);
@@ -128,20 +128,20 @@ class ListHashSet {
     }
   }
 
-	/**
-	 * Search for a key / element in this hash set
-	 * @param {any} key the key / element to search for
-	 * @return {boolean} true if the key / element was found
-	 */
-	find(key) {
-		return (typeof this._hashMap[this._toKeyFct(key)] !== 'undefined');
-	}
+  /**
+   * Search for a key / element in this hash set
+   * @param {any} key the key / element to search for
+   * @return {boolean} true if the key / element was found
+   */
+  find(key) {
+    return (typeof this._hashMap[this._toKeyFct(key)] !== 'undefined');
+  }
 
   /**
-	 * Check whether a key / element is contained in this hash set
-	 * @param {any} key the key / element to search for
-	 * @return {boolean} true if the key / element was found
-	 */
+   * Check whether a key / element is contained in this hash set
+   * @param {any} key the key / element to search for
+   * @return {boolean} true if the key / element was found
+   */
   contains(key) {
     return this.find(key);
   }

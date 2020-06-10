@@ -24,28 +24,29 @@ class SingleLink {
 
 /**
  * A wrapper for objects in a doubly linked list
+ * @template DataType
  */
 class DoubleLink {
   /**
    * Create a new wrapped object
-   * @param {any} data the object that is being wrapped
-   * @param {DoubleLink} [last] the previous object in the list
-   * @param {DoubleLink} [next] the next object in the list
+   * @param {DataType} data the object that is being wrapped
+   * @param {DoubleLink<DataType>} [last] the previous object in the list
+   * @param {DoubleLink<DataType>} [next] the next object in the list
    */
   constructor(data, last, next) {
     /**
      * the wrapped object
-     * @type {any}
+     * @type {DataType}
      */
     this.data = data;
     /**
      * the previous object in the list
-     * @type {DoubleLink}
+     * @type {DoubleLink<DataType>}
      */
     this.last = last;
     /**
      * the next object in the list
-     * @type {DoubleLink}
+     * @type {DoubleLink<DataType>}
      */
     this.next = next;
   }
@@ -234,11 +235,12 @@ class LinkedList {
 
 /**
  * A doubly linked list
+ * @template DataType
  */
 class DoublyLinkedList {
   /**
    * Constructs a new doubly linked list
-   * @param {any[]} [elems] the elements to insert into this list
+   * @param {...(DataType|(DataType[]))} [elems] the elements to insert into this list
    */
   constructor(...elems) {
     if (elems.length == 1 && (elems[0] instanceof Array)) {
@@ -251,12 +253,12 @@ class DoublyLinkedList {
     this.length = 0;
     /**
      * the first element in the list
-     * @type {DoubleLink}
+     * @type {DoubleLink<DataType>}
      */
     this.first = null;
     /**
      * the last element in the list
-     * @type {DoubleLink}
+     * @type {DoubleLink<DataType>}
      */
     this.last = null;
     if (elems.length > 0) {
@@ -274,7 +276,7 @@ class DoublyLinkedList {
   /**
    * Get an element at a specific index
    * @param {number} idx the index
-   * @return {any} the element at the specified index
+   * @return {DataType} the element at the specified index
    */
   get(idx) {
     if (idx < 0) throw new RangeError('DoublyLinkedList: index ' + idx + ' is out of bounds '
@@ -321,7 +323,7 @@ class DoublyLinkedList {
 
   /**
    * Remove a specific element
-   * @param {any} obj the element
+   * @param {DataType} obj the element
    * @return {boolean} true if the element was contained in this list
    */
   removeObj(obj) {
@@ -351,7 +353,7 @@ class DoublyLinkedList {
 
   /**
    * Remove a specific element from this list
-   * @param {DoubleLink} lnk the element to remove (its wrapper)
+   * @param {DoubleLink<DataType>} lnk the element to remove (its wrapper)
    */
   removeLink(lnk) {
     if (this.length == 0) throw new RangeError('DoublyLinkedList: cannot remove element from empty list.');
@@ -378,9 +380,9 @@ class DoublyLinkedList {
 
   /**
    * Add an element after a specific element
-   * @param {DoubleLink} lnk the element after which to add the new element
-   * @param {any} obj the element to add
-   * @return {DoubleLink} the added element's wrapper
+   * @param {DoubleLink<DataType>} lnk the element after which to add the new element
+   * @param {DataType} obj the element to add
+   * @return {DoubleLink<DataType>} the added element's wrapper
    */
   insertAfter(lnk, obj) {
     const ne = lnk.next;
@@ -396,9 +398,9 @@ class DoublyLinkedList {
 
   /**
    * Add an element before a specific element
-   * @param {DoubleLink} lnk the element before which to add the new element
-   * @param {any} obj the element to add
-   * @return {DoubleLink} the added element's wrapper
+   * @param {DoubleLink<DataType>} lnk the element before which to add the new element
+   * @param {DataType} obj the element to add
+   * @return {DoubleLink<DataType>} the added element's wrapper
    */
   insertBefore(lnk, obj) {
     const la = lnk.last;
@@ -414,9 +416,9 @@ class DoublyLinkedList {
 
   /**
    * Add an element after a specific element
-   * @param {DoubleLink} lnk the element after which to add the new element
-   * @param {DoubleLink} obj the wrapper of the element to add
-   * @return {DoubleLink} the added element's wrapper
+   * @param {DoubleLink<DataType>} lnk the element after which to add the new element
+   * @param {DoubleLink<DataType>} obj the wrapper of the element to add
+   * @return {DoubleLink<DataType>} the added element's wrapper
    */
   insertLinkAfter(lnk, obj) {
     const ne = lnk.next;
@@ -435,9 +437,9 @@ class DoublyLinkedList {
 
   /**
    * Add an element before a specific element
-   * @param {DoubleLink} lnk the element before which to add the new element
-   * @param {DoubleLink} obj the wrapper of the element to add
-   * @return {DoubleLink} the added element's wrapper
+   * @param {DoubleLink<DataType>} lnk the element before which to add the new element
+   * @param {DoubleLink<DataType>} obj the wrapper of the element to add
+   * @return {DoubleLink<DataType>} the added element's wrapper
    */
   insertLinkBefore(lnk, obj) {
     const la = lnk.last;
@@ -456,7 +458,7 @@ class DoublyLinkedList {
 
   /**
    * Check whether an element is contained in this list
-   * @param {any} obj the element
+   * @param {DataType} obj the element
    * @return {boolean} true if the element is contained in this list
    */
   contains(obj) {
@@ -472,8 +474,8 @@ class DoublyLinkedList {
 
   /**
    * Add an element to the end of this list
-   * @param {any} obj the element to add
-   * @return {DoubleLink} the element's wrapper
+   * @param {DataType} obj the element to add
+   * @return {DoubleLink<DataType>} the element's wrapper
    */
   pushBack(obj) {
     let ret;
@@ -489,7 +491,7 @@ class DoublyLinkedList {
 
   /**
    * Get the last element of this list
-   * @return {any} the last element
+   * @return {DataType} the last element
    */
   getBack() {
     if (this.length == 0) throw new RangeError('DoublyLinkedList: cannot get last element from empty list.');
@@ -498,7 +500,7 @@ class DoublyLinkedList {
 
   /**
    * Get and remove the last element of this list
-   * @return {any} the last element
+   * @return {DataType} the last element
    */
   popBack() {
     if (this.length == 0) throw new RangeError('DoublyLinkedList: cannot pop last element from empty list.');
@@ -512,8 +514,8 @@ class DoublyLinkedList {
 
   /**
    * Add an element to the beginning of this list
-   * @param {any} obj the element to add
-   * @return {DoubleLink} the element's wrapper
+   * @param {DataType} obj the element to add
+   * @return {DoubleLink<DataType>} the element's wrapper
    */
   pushFront(obj) {
     let ret;
@@ -529,7 +531,7 @@ class DoublyLinkedList {
 
   /**
    * Get the first element of this list
-   * @return {any} the first element
+   * @return {DataType} the first element
    */
   getFront() {
     if (this.length == 0) throw new RangeError('DoublyLinkedList: cannot get first element from empty list.');
@@ -538,7 +540,7 @@ class DoublyLinkedList {
 
   /**
    * Get and remove the first element of this list
-   * @return {any} the first element
+   * @return {DataType} the first element
    */
   popFront() {
     if (this.length == 0) throw new RangeError('DoublyLinkedList: cannot pop first element from empty list.');
@@ -552,7 +554,7 @@ class DoublyLinkedList {
 
   /**
    * Converts this list into an array
-   * @return {any[]} the array with the list elements
+   * @return {DataType[]} the array with the list elements
    */
   toArray() {
     const ret = [];

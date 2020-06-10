@@ -56,7 +56,7 @@ class BinaryHeap {
    * @return {any} the minimum element
    */
   min() {
-		if (this.length == 0) throw new RangeError('BinaryHeap: can\'t call min() on an empty heap.');
+    if (this.length == 0) throw new RangeError('BinaryHeap: can\'t call min() on an empty heap.');
     return this._data[0];
   }
 
@@ -148,7 +148,7 @@ class CustomBinaryHeap {
    * @return {any} the minimum element
    */
   min() {
-		if (this.length == 0) throw new RangeError('BinaryHeap: can\'t call min() on an empty heap.');
+    if (this.length == 0) throw new RangeError('BinaryHeap: can\'t call min() on an empty heap.');
     return this._data[0];
   }
 
