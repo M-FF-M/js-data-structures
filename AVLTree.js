@@ -1,11 +1,13 @@
 /**
  * An AVL tree
+ * @template CompareType The types beeing compared
+ * @template {CompareType} DataType
  */
 class AVLTreeNode {
   /**
    * Construct a new AVLTreeNode
-   * @param {Function} cmpFct the comparison function
-   * @param {DoubleLink} key the wrapper of the key / element to insert into this tree
+   * @param {(a: CompareType, b: CompareType) => number} cmpFct the comparison function
+   * @param {DoubleLink<DataType>} key the wrapper of the key / element to insert into this tree
    */
   constructor(cmpFct, key) {
     this._cmpFct = cmpFct;
@@ -16,7 +18,7 @@ class AVLTreeNode {
     this.h = 0;
     /**
      * the wrapper of the key / element of this node
-     * @type {DoubleLink}
+     * @type {DoubleLink<DataType>}
      */
     this.key = key;
     /**
@@ -26,12 +28,12 @@ class AVLTreeNode {
     this.balance = 0;
     /**
      * the left child of this node
-     * @type {AVLTreeNode}
+     * @type {AVLTreeNode<CompareType, DataType>}
      */
     this.left = null;
     /**
      * the right child of this node
-     * @type {AVLTreeNode}
+     * @type {AVLTreeNode<CompareType, DataType>}
      */
     this.right = null;
   }
@@ -60,7 +62,7 @@ class AVLTreeNode {
 
   /**
    * Search for a key / element in this tree
-   * @param {any} key the key / element to search for
+   * @param {CompareType} key the key / element to search for
    * @return {boolean} true if the key / element was found
    */
   find(key) {
@@ -76,10 +78,10 @@ class AVLTreeNode {
 
   /**
    * Search for the rightmost node in this tree
-   * @param {AVLTreeNode} parent the root / parent node
+   * @param {AVLTreeNode<CompareType, DataType>} parent the root / parent node
    * @param {boolean} rightChild should be true if this node is the right child of the parent node
    * @param {boolean} removeChild whether to remove the rightmost node
-   * @return {AVLTreeNode} the rightmost node
+   * @return {AVLTreeNode<CompareType, DataType>} the rightmost node
    */
   findRightChild(parent, rightChild, removeChild) {
     if (this.right != null) {
@@ -115,7 +117,7 @@ class AVLTreeNode {
 
   /**
    * Search for the leftmost node in this tree
-   * @return {number} the value of the leftmost node
+   * @return {DataType} the value of the leftmost node
    */
   findLeftChild() {
     if (this.left != null) {
@@ -127,8 +129,8 @@ class AVLTreeNode {
 
   /**
    * Insert a new key / element into this tree
-   * @param {DoubleLink} key the wrapper of the key / element to insert
-   * @param {DoublyLinkedList} list the list with all the keys / elements
+   * @param {DoubleLink<DataType>} key the wrapper of the key / element to insert
+   * @param {DoublyLinkedList<DataType>} list the list with all the keys / elements
    */
   insert(key, list) {
     const r = this.insertHelper(key, list);
@@ -138,7 +140,7 @@ class AVLTreeNode {
   /**
    * Remove a key / element from this tree
    * @param {any} key the key / element to remove
-   * @param {DoublyLinkedList} list the list with all the keys / elements
+   * @param {DoublyLinkedList<DataType>} list the list with all the keys / elements
    */
   remove(key, list) {
     const r = this.removeHelper(key, list);
@@ -147,9 +149,9 @@ class AVLTreeNode {
 
   /**
    * Insert a new key / element into this tree
-   * @param {DoubleLink} key the wrapper of the key / element to insert
-   * @param {DoublyLinkedList} list the list with all the keys / elements
-   * @return {AVLTreeNode} the new root node of this tree
+   * @param {DoubleLink<DataType>} key the wrapper of the key / element to insert
+   * @param {DoublyLinkedList<DataType>} list the list with all the keys / elements
+   * @return {AVLTreeNode<CompareType, DataType>} the new root node of this tree
    */
   insertHelper(key, list) {
     if (this._cmpFct(key.data, this.key.data) == 0) return this;
@@ -175,9 +177,9 @@ class AVLTreeNode {
 
   /**
    * Remove a key / element from this tree
-   * @param {any} key the key / element to remove
-   * @param {DoublyLinkedList} list the list with all the keys / elements
-   * @return {AVLTreeNode} the new root node of this tree
+   * @param {CompareType} key the key / element to remove
+   * @param {DoublyLinkedList<DataType>} list the list with all the keys / elements
+   * @return {AVLTreeNode<CompareType, DataType>} the new root node of this tree
    */
   removeHelper(key, list) {
     if (this._cmpFct(key, this.key.data) == 0) {
@@ -209,7 +211,7 @@ class AVLTreeNode {
 
   /**
    * Check whether this is a valid AVL tree and roatate if necessary
-   * @return {AVLTreeNode} the new root node of this tree
+   * @return {AVLTreeNode<CompareType, DataType>} the new root node of this tree
    */
   checkForValidity() {
     if (Math.abs(this._heightDiff()) <= 1) return this;
@@ -303,15 +305,23 @@ class AVLTreeNode {
 
 /**
  * An AVL tree
+ * @template CompareType The types beeing compared 
+ * @template {CompareType} DataType
  */
 class AVLTree {
   /**
    * Create a new AVL tree
-   * @param {Function} [cmpFct] the comparison function
+   * @param {(a: CompareType, b: CompareType) => number} [cmpFct] the comparison function
    */
   constructor(cmpFct = (a, b) => a - b) {
     this._cmpFct = cmpFct;
+    /**
+     * @type {AVLTreeNode<CompareType, DataType>}
+     */
     this._root = null;
+    /**
+     * @type {DoublyLinkedList<DataType>}
+     */
     this._list = new DoublyLinkedList();
   }
 
@@ -325,7 +335,7 @@ class AVLTree {
 
   /**
    * Insert a new key / element into this AVL tree
-   * @param {any} key the key / element to be inserted
+   * @param {DataType} key the key / element to be inserted
    */
   insert(key) {
     if (this._root == null) {
@@ -339,7 +349,7 @@ class AVLTree {
 
   /**
    * Remove a key / element from this AVL tree
-   * @param {any} key the key / element to be removed
+   * @param {CompareType} key the key / element to be removed
    */
   remove(key) {
     if (this._root == null) return;
@@ -355,7 +365,7 @@ class AVLTree {
 
   /**
    * Search for a key / element in this AVL tree
-   * @param {any} key the key / element to search for
+   * @param {CompareType} key the key / element to search for
    * @return {boolean} true if the key / element was found
    */
   find(key) {
@@ -365,7 +375,7 @@ class AVLTree {
 
   /**
    * Check whether a key / element is contained in this AVL tree
-   * @param {any} key the key / element to search for
+   * @param {CompareType} key the key / element to search for
    * @return {boolean} true if the key / element was found
    */
   contains(key) {
@@ -374,7 +384,7 @@ class AVLTree {
 
   /**
    * Converts this AVL tree into an array
-   * @return {any[]} the array with the tree elements
+   * @return {DataType[]} the array with the tree elements
    */
   toArray() {
     return this._list.toArray();
@@ -403,11 +413,13 @@ class AVLTree {
 
 /**
  * A tree set
+ * @template CompareType The types beeing compared 
+ * @template {CompareType} DataType
  */
 class TreeSet extends AVLTree {
   /**
    * Create a new tree set
-   * @param {Function} [cmpFct] the comparison function
+   * @param {(a: CompareType, b: CompareType) => number} [cmpFct] the comparison function
    */
   constructor(cmpFct = (a, b) => a - b) {
     super(cmpFct);
