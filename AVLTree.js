@@ -1,6 +1,6 @@
 /**
  * An AVL tree
- * @template CompareType The types beeing compared
+ * @template CompareType the types being compared
  * @template {CompareType} DataType
  */
 class AVLTreeNode {
